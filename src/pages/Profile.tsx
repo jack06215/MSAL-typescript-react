@@ -11,16 +11,22 @@ import { Loading } from "../ui-components/Loading";
 import { ErrorComponent } from "../ui-components/ErrorComponent";
 import { callMsGraph } from "../utils/MsGraphApiCall";
 
+import { callApi } from '../api';
+import { apiConfig } from '../authConfig';
+
 // Material-ui imports
 import Paper from "@material-ui/core/Paper";
 
 const ProfileContent = () => {
     const { instance, inProgress } = useMsal();
-    const [graphData, setGraphData] = useState<null|GraphData>(null);
+    const [graphData, setGraphData] = useState<null | GraphData>(null);
 
     useEffect(() => {
         if (!graphData && inProgress === InteractionStatus.None) {
-            callMsGraph().then(response => setGraphData(response)).catch((e) => {
+            callMsGraph().then(response => {
+                console.log(response);
+                setGraphData(response);
+            }).catch((e) => {
                 if (e instanceof InteractionRequiredAuthError) {
                     instance.acquireTokenRedirect({
                         ...loginRequest,
@@ -30,6 +36,22 @@ const ProfileContent = () => {
             });
         }
     }, [inProgress, graphData, instance]);
+
+    // useEffect(() => {
+    //     if (!graphData && inProgress === InteractionStatus.None) {
+    //         callApi(apiConfig.webApi).then(response => {
+    //             console.log(`Response: \n${response}`);
+    //             setGraphData(response);
+    //         }).catch((e) => {
+    //             if (e instanceof InteractionRequiredAuthError) {
+    //                 instance.acquireTokenRedirect({
+    //                     ...loginRequest,
+    //                     account: instance.getActiveAccount() as AccountInfo
+    //                 });
+    //             }
+    //         });
+    //     }
+    // }, [inProgress, graphData, instance]);
   
     return (
         <Paper>

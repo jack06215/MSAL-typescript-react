@@ -1,6 +1,5 @@
 import { Configuration, PopupRequest, SilentRequest } from "@azure/msal-browser";
 import { LogLevel } from '@azure/msal-common';
-import { apiConfig } from "./apiConfig";
 import { b2cPolicies } from "./policies";
 
 // Config object to be passed to Msal on creation
@@ -41,6 +40,16 @@ export const msalConfig: Configuration = {
     },
 };
 
+export const apiConfig = {
+    b2cScopes: ["https://jackazureadb2c.onmicrosoft.com/tasks-api/tasks.read"],
+    webApi: "http://localhost:5000/hello",
+};
+
+// Add here the endpoints for MS Graph API services you would like to use.
+export const graphConfig = {
+    graphMeEndpoint: "https://graph.microsoft.com/v1.0/me"
+};
+
 // Add here scopes for id token to be used at MS Identity Platform endpoints.
 export const loginRequest: PopupRequest = {
     scopes: ["openid", ...apiConfig.b2cScopes],
@@ -51,7 +60,4 @@ export const tokenRequest: SilentRequest = {
     forceRefresh: false,
 };
 
-// Add here the endpoints for MS Graph API services you would like to use.
-export const graphConfig = {
-    graphMeEndpoint: "https://graph.microsoft-ppe.com/v1.0/me"
-};
+
